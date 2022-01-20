@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import InputField from "../../components/common/InputField";
+import React, { useState, useRef, useEffect } from 'react';
 import Alert from "../../components/common/Alert";
 import Modal from "../../components/common/Modal";
 
@@ -19,6 +18,11 @@ const Register = () => {
   const [ msg, setMsg ] = useState('');
   const [ showModal, setShowModal ] = useState(false);
   const { username, password, password2, email, firstname, lastname } = createUser; 
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const onChange = e => {
     const { value, name } = e.target;
@@ -95,62 +99,99 @@ const Register = () => {
     <>
       <form className="w-75 p-5 mx-auto">
         <h3>新規登録</h3>
-        <InputField
-          label="username"
-          type="text"
-          name="username"
-          value={ createUser.username }
-          minLength={ 8 }
-          maxLength={ 16 }
-          placeholder="username"
-          onChange={ onChange }
-        />
-        <InputField
-          label="password"
-          type="password"
-          name="password"
-          value={ createUser.password }
-          minLength={ 8 }
-          maxLength={ 16 }
-          placeholder="********"
-          onChange={ onChange }
-        />
-        <InputField
-          label="passwordCheck"
-          type="password"
-          name="password2"
-          value={ createUser.password2 }
-          minLength={ 8 }
-          maxLength={ 16 }
-          placeholder="********"
-          onChange={ onChange }
-        />
-        <InputField
-          label="Email"
-          type="email"
-          name="email"
-          value={ createUser.email }
-          placeholder="travel@gmail.com"
-          minLength={ 10 }
-          maxLength={ 50 }
-          onChange={ onChange }
-        />
-        <InputField
-          label="FirstName"
-          type="text"
-          name="firstname"
-          value={ createUser.firstname }
-          placeholder="xxxx"
-          onChange={ onChange }
-        />
-        <InputField
-          label="LastName"
-          type="text"
-          name="lastname"
-          value={ createUser.lastname }
-          placeholder="xxxx"
-          onChange={ onChange }
-        />
+        <div className="mb-3 row">
+          <label htmlFor="username" className="col-sm-3 col-form-label">username</label>
+          <div className="col-sm-9">
+            <input
+              ref={ inputRef }
+              type="text"
+              className="form-control"
+              id="username"
+              name="username"
+              placeholder="username"
+              minLength="8"
+              maxLength="16"
+              onChange={ onChange }
+              value={ createUser.username }
+              autoComplete="on" />
+          </div>
+        </div>
+        <div className="mb-3 row">
+          <label htmlFor="password" className="col-sm-3 col-form-label">password</label>
+          <div className="col-sm-9">
+            <input
+              type="password"
+              className="form-control"
+              id="password"
+              name="password"
+              placeholder="********"
+              minLength="8"
+              maxLength="16"
+              onChange={ onChange }
+              value={ createUser.password }
+              autoComplete="on" />
+          </div>
+        </div>
+        <div className="mb-3 row">
+          <label htmlFor="passwordCheck" className="col-sm-3 col-form-label">passwordCheck</label>
+          <div className="col-sm-9">
+            <input
+              type="password"
+              className="form-control"
+              id="passwordCheck"
+              name="password2"
+              placeholder="********"
+              minLength="8"
+              maxLength="16"
+              onChange={ onChange }
+              value={ createUser.password2 }
+              autoComplete="on" />
+          </div>
+        </div>
+        <div className="mb-3 row">
+          <label htmlFor="Email" className="col-sm-3 col-form-label">Email</label>
+          <div className="col-sm-9">
+            <input
+              type="email"
+              className="form-control"
+              id="Email"
+              name="email"
+              placeholder="travel@gmail.com"
+              minLength="10"
+              maxLength="50"
+              onChange={ onChange }
+              value={ createUser.email }
+              autoComplete="on" />
+          </div>
+        </div>
+        <div className="mb-3 row">
+          <label htmlFor="FirstName" className="col-sm-3 col-form-label">FirstName</label>
+          <div className="col-sm-9">
+            <input
+              type="text"
+              className="form-control"
+              id="FirstName"
+              name="firstname"
+              placeholder="xxxx"
+              onChange={ onChange }
+              value={ createUser.firstname }
+              autoComplete="on" />
+          </div>
+        </div>
+        <div className="mb-3 row">
+          <label htmlFor="LastName" className="col-sm-3 col-form-label">LastName</label>
+          <div className="col-sm-9">
+            <input
+              type="text"
+              className="form-control"
+              id="LastName"
+              name="lastname"
+              placeholder="xxxx"
+              onChange={ onChange }
+              value={ createUser.lastname }
+              autoComplete="on" />
+          </div>
+        </div>
 
         <button type="button" className="btn btn-outline-primary m-1" onClick={ openModal }>Confirm</button>
         <button type="button" className="btn btn-outline-danger m-1" onClick={() => window.location.href = "/"}>Cancel</button>
