@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import Alert from "../../components/common/Alert";
 import Modal from "../../components/common/Modal";
+import { UserContext } from '../../lib/Auth';
 
 
 const userCreate = {
@@ -18,6 +19,8 @@ const Register = () => {
   const [ msg, setMsg ] = useState('');
   const [ showModal, setShowModal ] = useState(false);
   const { username, password, password2, email, firstname, lastname } = createUser; 
+  const [ token, setToken] = useContext(UserContext);
+
   const inputRef = useRef();
 
   useEffect(() => {
@@ -88,8 +91,7 @@ const Register = () => {
           setMsg(response.detail);
           return;
         }
-        // 新規登録に成功したらログインページへ移動する
-        window.location.href = "/login";
+        setToken(response.access_token);
       });
   }
 

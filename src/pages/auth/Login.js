@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import Alert from "../../components/common/Alert";
-import { setToken } from "../../lib/Auth";
+import { UserContext } from "../../lib/Auth";
 
 const user = {
   username: "",
@@ -11,6 +11,8 @@ const Login = () => {
   const [ loginUser, setLoginUser ] = useState(user);
   const [ msg, setMsg ] = useState('');
   const { username, password } = loginUser; 
+  const [, setToken] = useContext(UserContext);
+
   const inputRef = useRef();
 
   useEffect(() => {
@@ -26,8 +28,6 @@ const Login = () => {
   };
 
   const onSubmit = e => {
-    console.log(username);
-
     e.preventDefault();
     const data = { username: username, password: password};
     const param = { method: "POST",
@@ -43,10 +43,9 @@ const Login = () => {
           return;
         }
 
-        // tokenが存在すればcookieに保存する
+        //tokenが存在すればlocalstorageに保存する
         if (response.access_token) {
-          setToken(response.access_token, {path: "/"});
-          window.location.href = "/";
+          setToken(response.access_token);
         }
     });
   }

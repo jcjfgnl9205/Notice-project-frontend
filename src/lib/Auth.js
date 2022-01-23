@@ -1,20 +1,33 @@
-import { useLocation, Navigate } from "react-router-dom"
-import { Cookies } from 'react-cookie'
+import React, { createContext, useEffect, useState } from "react";
 
-const cookies = new Cookies();
+export const UserContext = createContext();
 
-export const setToken = (value, opt) => {
+export const UserProvider = props => {
+  const [token, setToken] = useState(localStorage.getItem("token") == null ? null : localStorage.getItem("token"));
 
-    cookies.set("access-token", value, { ...opt });
-}
+  useEffect(() => {
+    const fetchUser = async () => {
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token,
+        },
+        
+      };
 
-export const getToken = () => {
+      const response = await (await fetch("http://127.0.0.1:8000/auth/protected", requestOptions)).json();
+      if (!response.current_user) {
+        setToken(null);
+      }
+      localStorage.setItem("token", token);
+    };
+    fetchUser();
+  }, [token]);
 
-    return cookies.get("access-token");
-}
-
-export function removeToken(){
-
-    cookies.remove("access-token");
-    window.location.href = "/";
-}
+  return (
+    <UserContext.Provider value={[token, setToken]}>
+      { props.children }
+    </UserContext.Provider>
+  );
+};
