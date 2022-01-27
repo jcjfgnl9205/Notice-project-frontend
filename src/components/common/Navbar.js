@@ -11,12 +11,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light px-5">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light px-5 mb-5">
       <div className="collapse navbar-collapse">
         <Link className="navbar-brand" to="/">Home</Link>
         <ul className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link className="nav-link" to="#">Page1</Link>
+            <Link className="nav-link" to="/notices">Notice</Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="#">Page2</Link>
