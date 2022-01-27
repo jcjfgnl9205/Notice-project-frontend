@@ -3,7 +3,8 @@ import React, { createContext, useEffect, useState } from "react";
 export const UserContext = createContext();
 
 export const UserProvider = props => {
-  const [token, setToken] = useState(localStorage.getItem("token") == null ? null : localStorage.getItem("token"));
+  const [token, setToken] = useState((localStorage.getItem("token") === "null") ? null : localStorage.getItem("token"));
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -17,10 +18,12 @@ export const UserProvider = props => {
       };
 
       const response = await (await fetch("http://127.0.0.1:8000/auth/protected", requestOptions)).json();
-      if (!response.current_user) {
+      if (!response.username) {
         setToken(null);
+        setUser(null);
       }
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(response))
     };
     fetchUser();
   }, [token]);
