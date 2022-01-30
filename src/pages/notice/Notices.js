@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Table from '../../components/common/Table';
+import Pagination from '../../components/common/Pagination';
 
 
 const Notices = () => {
@@ -8,18 +9,36 @@ const Notices = () => {
   const [ notices, setNotices ] = useState([]);
   const columns = ["No", "Title", "Views", "Created"]
   const user = JSON.parse(localStorage.getItem("user"))
+  
+  const [ noticeTotal, setNoticeTotal ] = useState(0);//noticeの数
+  const [ currentPage, setCurrentPage ] = useState(1);//現在ページ
+  const [ paginationPage, setPaginationPage ] = useState(5);//一つのページに表示するnotice数
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  }
 
   useEffect(() => {
-    fetch("http://localhost:8000/notices")
+    const url = `http://localhost:8000/notices?page=${currentPage}&size=${paginationPage}`;
+    fetch(url)
       .then( response => { return response.json() })
       .then( response => {
-        setNotices(response);
+        setNotices(response.items);
+        setNoticeTotal(response.total);
+        
     });
-  }, []);
+  }, [currentPage]);
 
   const renderNotices = notices.length 
                         ? <Table columns={ columns } data={ notices } /> 
-                        : 'error';
+                        : 'null';
+
+  const renderPagination = notices.length
+                        ? <Pagination noticeTotal={ noticeTotal }
+                                      paginate={ paginate }
+                                      paginationPage={ paginationPage }
+                                      currentPage={ currentPage } /> 
+                        : 'null';
 
   return (
     <>
@@ -31,6 +50,7 @@ const Notices = () => {
         }
       </div>
       { renderNotices }
+      { renderPagination }
     </>
   );
 }
