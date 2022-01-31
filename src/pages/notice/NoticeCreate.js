@@ -57,7 +57,7 @@ const NoticeCreate = () => {
                         body: JSON.stringify(data)
         };
 
-        const url = "http://localhost:8000/notices/create";
+        const url = "http://localhost:8000/notices";
         const fetchNotice = async () => {
           const response = await fetch(url, param);
           const data = await response.json();

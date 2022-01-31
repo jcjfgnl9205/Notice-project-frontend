@@ -272,11 +272,17 @@ h5 {
   color: #fc5356;
   margin: 0;
 }
-.comment .comment-title span {
+.comment .comment-title .comment-date {
   font-weight: 400;
   font-size: 12px;
   color: #C0C0C0;
   margin: 0;
+}
+.comment .comment-title .delete-btn:hover {
+  cursor: pointer;
+}
+.comment .comment-title .update-btn:hover {
+  cursor: pointer;
 }
 .comment .comment-comment {
   margin-bottom: 15px;

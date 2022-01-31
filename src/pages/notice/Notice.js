@@ -10,6 +10,7 @@ const Notice = () => {
   const [ token, setToken ] = useContext(UserContext);
   const navigate = useNavigate();
 
+  // Get Notice
   useEffect(() => {
     const notice = async() => {
       const requestOptions = {
@@ -31,7 +32,7 @@ const Notice = () => {
     notice();
   }, []);
 
-
+  // Create Comment
   const commentOnSubmit = comment => {
     const id = path.split("/");
 
@@ -58,9 +59,37 @@ const Notice = () => {
     });
   }
 
+  // Delete Comment
+  const commentDelete = comment_id => {
+    const id = path.split("/");
+    const data = { notice_id: id[id.length - 1], comment_id: comment_id };
+    const param = { method: "DELETE",
+                    headers: { "Content-Type": "application/json;"
+                              , "Authorization": "Bearer " + token},
+                    body: JSON.stringify(data)
+    };
+    const url = "http://localhost:8000"+path+"/comment/"+comment_id;
+    const fetchComment = async () => {
+      const response = await fetch(url, param);
+      const data = await response.json();
+      return data;
+    }
+
+    fetchComment().then( response => {
+      setData(response);
+    }).catch( e => {
+      console.log(e);
+      return;
+    });
+  }
+
   const renderNotice = data === null 
                       ? <Spinner />
-                      : <DetailPage data={ data } commentOnSubmit={ commentOnSubmit } token={ token } />;
+                      : <DetailPage data={ data } 
+                                    token={ token }
+                                    commentOnSubmit={ commentOnSubmit }
+                                    commentDelete={ commentDelete }
+                                    />;
 
   return (
     <>
