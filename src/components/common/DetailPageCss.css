@@ -241,3 +241,43 @@ h5 {
   margin-bottom: 25px;
   font-size: 22px;
 }
+.article-comment h6 {
+  font-weight: 700;
+  margin-bottom: 25px;
+  font-size: 16px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.article-comment p {
+  margin-bottom: 25px;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* Comment */
+.comment {
+  box-shadow: 0 0 30px rgba(31, 45, 61, 0.125);
+  border-radius: 5px;
+  overflow: hidden;
+  background: #ffffff;
+  padding: 15px;
+  margin: 15px 0 30px;
+}
+.comment .comment-item {
+  margin-bottom: 20px;
+  border-bottom: 1px dashed #ddd;
+}
+.comment .comment-title label {
+  font-weight: 600;
+  color: #fc5356;
+  margin: 0;
+}
+.comment .comment-title span {
+  font-weight: 400;
+  font-size: 12px;
+  color: #C0C0C0;
+  margin: 0;
+}
+.comment .comment-comment {
+  margin-bottom: 15px;
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import './DetailPageCss.css';
-
+import CommentAllow from './CommentAllow';
+import CommentNotAllow from './CommentNotAllow';
 
 const DetailPage = (props) => {
   return (
@@ -42,20 +43,24 @@ const DetailPage = (props) => {
               </article>
 
               {/* コメント COMMENT */}
-              <div className="contact-form article-comment">
-                <h4>Comments</h4>
-                <form id="contact-form" method="POST">
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="form-group">
-                        <textarea className="form-control" id="comments" rows="3" cols="50" placeholder="Comment" maxLength="1000" style={{resize: 'none'}}></textarea>
+              <div className="comment">
+                {
+                  props.data.comment?.map(comment => (
+                    <div className="comment-item" key={comment.id} >
+                      <div className="comment-title d-flex justify-content-between">
+                        <label>{ comment.username }</label>
+                        <span>{ new Date(comment.created_at).toISOString().split("T")[0] }</span>
+                      </div>
+                      <div className="comment-comment">
+                        { comment.comment}
                       </div>
                     </div>
-                    <div className="col-md-12">
-                      <button type="button" className="btn btn-outline-primary btn-sm m-1">Submit</button>
-                    </div>
-                  </div>
-                </form>
+                  ))
+                }
+                { props.token
+                ? <CommentAllow commentOnSubmit={ props.commentOnSubmit } /> 
+                : <CommentNotAllow />
+                }
               </div>
             </div>
 

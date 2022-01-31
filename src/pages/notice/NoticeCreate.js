@@ -20,7 +20,6 @@ const NoticeCreate = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-      console.log(user)
       if (!user.is_staff) {
         navigate(-1);
       }
@@ -37,7 +36,6 @@ const NoticeCreate = () => {
     const validateForm = () => {
       if (!title) {
         setMsg('titleを入力してください。');
-        console.log("Test")
         return false;
       }
       if (!content) {
