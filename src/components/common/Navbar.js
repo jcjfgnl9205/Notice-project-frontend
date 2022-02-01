@@ -4,8 +4,7 @@ import { UserContext } from '../../lib/Auth';
 
 const Navbar = () => {
 
-  const { token, logout } = useContext(UserContext);
-
+  const { logout, user } = useContext(UserContext);
   const handleLogout = () => {
     logout()
     localStorage.removeItem('token')
@@ -28,10 +27,10 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="d-flex">
-      { token
+      { user
         ? <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link" to="#">Username</Link>
+              <Link className="nav-link" to="#">{user.sub}</Link>
             </li>
             <li className="nav-item">
               <button className="btn btn-link text-dark" style={{ textDecoration: 'none'}} onClick={ handleLogout }>Logout</button>

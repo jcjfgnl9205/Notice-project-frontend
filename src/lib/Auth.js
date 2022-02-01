@@ -22,6 +22,10 @@ export const UserProvider = props => {
     if (response.status === 200) {
       localStorage.setItem("token", token);
     }
+
+    if(loading){
+      setLoading(false)
+    }
   }
 
   // 会員登録
