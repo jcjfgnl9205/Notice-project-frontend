@@ -278,12 +278,16 @@ h5 {
   color: #C0C0C0;
   margin: 0;
 }
-.comment .comment-title .delete-btn:hover {
-  cursor: pointer;
-}
-.comment .comment-title .update-btn:hover {
-  cursor: pointer;
-}
 .comment .comment-comment {
   margin-bottom: 15px;
+}
+
+.delete-btn:hover {
+  cursor: pointer;
+}
+.update-btn:hover {
+  cursor: pointer;
+}
+.update-cancel-btn:hover {
+  cursor: pointer;
 }

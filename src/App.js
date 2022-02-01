@@ -17,7 +17,7 @@ import NoticeCreate from './pages/notice/NoticeCreate';
 
 const App = () => {
 
-  const [ token, setToken ] = useContext(UserContext);
+  const { token } = useContext(UserContext);
 
   return (
     <Router>

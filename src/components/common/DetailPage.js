@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import './DetailPageCss.css';
 import CommentAllow from './CommentAllow';
 import CommentNotAllow from './CommentNotAllow';
+import { UserContext } from '../../lib/Auth';
 
 const DetailPage = (props) => {
+
+  const [ cmd, setCmd ] = useState(false);
+  const { user } = useContext(UserContext);
+  const textareaValue = useRef();
+
   return (
     <>
       <div className="detail-single">
@@ -11,8 +17,18 @@ const DetailPage = (props) => {
           <div className="row align-items-start">
             <div className="col-lg-8 m-15 px-tb">
               <article className="article">
+                {/* 本文 Title, username etc.. */}
                 <div className="article-title">
-                  <h2>{ props.data.title }</h2>
+                  <div className="d-flex justify-content-between">
+                    <h2>{ props.data.title }</h2>
+                    { user && props.data.user.username == user.sub
+                    ? <span>
+                        <i className="bi bi-pencil m-1 update-btn"></i>
+                        <i className="bi bi-trash m-1 delete-btn" onClick={ () => props.noticeDelete(props.data.id) }></i>
+                      </span>
+                    : null
+                    }
+                  </div>
                   <div className="media">
                     <div className="media-body">
                       <label>{ props.data.user.username }</label>
@@ -46,19 +62,30 @@ const DetailPage = (props) => {
                       <div className="comment-title d-flex justify-content-between">
                         <label>{ comment.username }</label>
                         <div>
-                            { comment.owner_id == JSON.parse(localStorage.getItem("user"))["id"]
+                            { user && comment.username == user.sub
                               ? <span>
-                                  <i className="bi bi-pencil m-1 update-btn"></i>
-                                  <i className="bi bi-trash m-1 delete-btn" onClick={ () => props.commentDelete(comment.id) }></i>
+                                  {
+                                    cmd && cmd == comment.id
+                                    ? <span>
+                                        <i className="bi bi-pencil-fill m-1 update-btn" onClick={ () => props.commentUpdateOnSubmit(textareaValue.current.value, comment.id, setCmd) }></i>
+                                        <i className="bi bi-x-lg m-1 update-cancel-btn" onClick={ () => setCmd(false) }></i>
+                                      </span>
+                                    : <span>
+                                        <i className="bi bi-pencil m-1 update-btn" onClick={ () => setCmd(comment.id) }></i>
+                                        <i className="bi bi-trash m-1 delete-btn" onClick={ () => props.commentDelete(comment.id) }></i>
+                                      </span>
+                                  }
                                 </span>
                               : null
                             }
                           <span className="comment-date">{ new Date(comment.created_at).toISOString().split("T")[0] }</span>
                         </div>
                       </div>
-                      <div className="comment-comment">
-                        { comment.comment}
-                      </div>
+                      {
+                        cmd && cmd == comment.id
+                        ? <CommentAllow cmd="update" comment={ comment } cmd={ cmd } setCmd={ setCmd } textareaRef={textareaValue} />
+                        : <div className="comment-comment" >{ comment.comment}</div>
+                      }
                     </div>
                   ))
                 }
