@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import DetailPage from '../../components/common/DetailPage';
+import DetailPage from '../../components/notice/DetailPage';
 import Spinner from '../../components/common/Spinner';
 import { UserContext } from '../../lib/Auth';
 
@@ -141,6 +141,8 @@ const Notice = () => {
       return;
     });
   }
+
+  
 
   const renderNotice = data === null 
                       ? <Spinner />

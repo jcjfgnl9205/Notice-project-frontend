@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../../lib/Auth";
 import Alert from "../../components/common/Alert";
-import CreateForm from '../../components/common/CreateForm';
+import CreateForm from '../../components/notice/CreateForm';
 import Spinner from '../../components/common/Spinner'
 
 
