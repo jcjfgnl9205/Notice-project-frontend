@@ -2,16 +2,12 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import Alert from "../../components/common/Alert";
 import { UserContext } from "../../lib/Auth";
 
-const user = {
-  username: "",
-  password: ""
-}
 
 const Login = () => {
-  const [ loginUser, setLoginUser ] = useState(user);
+  const [ loginUser, setLoginUser ] = useState({ username: "", password: "" });
   const [ msg, setMsg ] = useState('');
   const { username, password } = loginUser; 
-  const [, setToken] = useContext(UserContext);
+  const { login } = useContext(UserContext);
 
   const inputRef = useRef();
 
@@ -22,32 +18,14 @@ const Login = () => {
   const onChange = e => {
     const { value, name } = e.target;
     setLoginUser({
-      ...loginUser, //Inputをコビーする
+      ...loginUser,
       [name]: value
     });
   };
 
   const onSubmit = e => {
     e.preventDefault();
-    const data = { username: username, password: password};
-    const param = { method: "POST",
-            headers: { "Content-Type": "application/json;" },
-            body: JSON.stringify(data)
-            };
-
-    fetch("http://localhost:8000/auth/login", param)
-      .then( response => { return response.json() })
-      .then( response => {
-        if (response.detail) {
-          setMsg(response.detail);
-          return;
-        }
-
-        //tokenが存在すればlocalstorageに保存する
-        if (response.access_token) {
-          setToken(response.access_token);
-        }
-    });
+    login(username, password)
   }
 
   const errorMsg = msg ? <Alert msg={msg} className="alert alert-warning"/> : null;

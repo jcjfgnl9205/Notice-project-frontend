@@ -15,12 +15,11 @@ const NoticeCreate = () => {
     const [ notice, setNotice ] = useState(noticeCreate);
     const { title, content } = notice;
     const [ msg, setMsg ] = useState('');
-    const [ token, setToken] = useContext(UserContext);
-    const user = JSON.parse(localStorage.getItem("user"));
+    const { token, user } = useContext(UserContext);
     const navigate = useNavigate();
 
     useEffect(() => {
-      if (!user.is_staff) {
+      if (!user) {
         navigate(-1);
       }
     });
@@ -65,14 +64,14 @@ const NoticeCreate = () => {
         }
 
         fetchNotice().then( notice => {
-          window.location.href = "/notices";
+          navigate("/notices");
         }).catch( e => {
           console.log(e);
           return;
         });
       }
     }
-    const renderNoticeCreate = !user.is_staff 
+    const renderNoticeCreate = !user 
                                 ? <Spinner />
                                 : <CreateForm onSubmit={ onSubmit } onChange={ onChange } data={ notice }/>;
 

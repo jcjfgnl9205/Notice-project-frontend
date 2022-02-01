@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Table from '../../components/common/Table';
 import Pagination from '../../components/common/Pagination';
+import { UserContext } from '../../lib/Auth';
 
 
 const Notices = () => {
 
   const [ notices, setNotices ] = useState([]);
   const columns = ["No", "Title", "Views", "Created"]
-  const user = JSON.parse(localStorage.getItem("user"))
-  
+  const { user } = useContext(UserContext);
   const [ noticeTotal, setNoticeTotal ] = useState(0);//noticeの数
   const [ currentPage, setCurrentPage ] = useState(1);//現在ページ
   const [ paginationPage, setPaginationPage ] = useState(5);//一つのページに表示するnotice数
@@ -44,7 +44,7 @@ const Notices = () => {
     <>
       <div className="d-flex justify-content-between">
         <h2>Notice</h2>
-        { user.is_staff 
+        { user 
           ? <Link className="btn btn-outline-primary btn-sm m-2" to={{ pathname: "create" }}>create</Link>
           : null
         }

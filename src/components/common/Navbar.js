@@ -4,10 +4,11 @@ import { UserContext } from '../../lib/Auth';
 
 const Navbar = () => {
 
-  const [token, setToken] = useContext(UserContext);
+  const { token, logout } = useContext(UserContext);
 
   const handleLogout = () => {
-    setToken(null);
+    logout()
+    localStorage.removeItem('token')
   };
 
   return (

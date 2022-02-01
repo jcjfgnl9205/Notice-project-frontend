@@ -19,7 +19,7 @@ const Register = () => {
   const [ msg, setMsg ] = useState('');
   const [ showModal, setShowModal ] = useState(false);
   const { username, password, password2, email, firstname, lastname } = createUser; 
-  const [ token, setToken] = useContext(UserContext);
+  const { token, SignUp } = useContext(UserContext);
 
   const inputRef = useRef();
 
@@ -72,27 +72,14 @@ const Register = () => {
 
   const createUserFunc = e => {
     e.preventDefault();
-    
     const data = { username: username
                   , email: email
                   , first_name: firstname
                   , last_name: lastname
                   , password: password
                   , is_active: true};
-    const param = { method: "POST",
-                    headers: { "Content-Type": "application/json;" },
-                    body: JSON.stringify(data)
-                    };
+    SignUp(data);
 
-    fetch("http://localhost:8000/auth/register", param)
-      .then( response => { return response.json() })
-      .then( response => {
-        if (response.detail) {
-          setMsg(response.detail);
-          return;
-        }
-        setToken(response.access_token);
-      });
   }
 
   const errorMsg = msg ? <Alert msg={msg} className="alert alert-warning"/> : null;
