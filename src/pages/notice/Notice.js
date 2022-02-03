@@ -142,13 +142,45 @@ const Notice = () => {
     });
   }
 
-  
+  // like button event
+  const likeButtonEvent = async () => {
+    const id = path.split("/");
+    const param = { method: "POST",
+                    headers: { "Content-Type": "application/json;"
+                              , "Authorization": "Bearer " + token},
+                    body: JSON.stringify({ "notice_id": id[id.length - 1] })
+                    };
+
+    const response = await fetch("http://localhost:8000"+path+"/like", param);
+    const data = await response.json();
+    if (response.status === 200) {
+      setData(data)
+    }
+  }
+
+  // hate button event
+  const hateButtonEvent = async () => {
+    const id = path.split("/");
+    const param = { method: "POST",
+                    headers: { "Content-Type": "application/json;"
+                              , "Authorization": "Bearer " + token},
+                    body: JSON.stringify({ "notice_id": id[id.length - 1] })
+                    };
+
+    const response = await fetch("http://localhost:8000"+path+"/hate", param);
+    const data = await response.json();
+    if (response.status === 200) {
+      setData(data)
+    }
+  }
 
   const renderNotice = data === null 
                       ? <Spinner />
                       : <DetailPage data={ data } 
                                     token={ token }
                                     noticeDelete={ noticeDelete }
+                                    likeButtonEvent = { likeButtonEvent }
+                                    hateButtonEvent = { hateButtonEvent }
                                     commentOnSubmit={ commentOnSubmit }
                                     commentUpdateOnSubmit = { commentUpdateOnSubmit }
                                     commentDelete={ commentDelete }

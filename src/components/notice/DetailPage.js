@@ -1,13 +1,15 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import './DetailPageCss.css';
 import CommentAllow from './CommentAllow';
 import CommentNotAllow from './CommentNotAllow';
 import { UserContext } from '../../lib/Auth';
+import LikeButton from '../common/LikeButton';
+import HateButton from '../common/HateButton';
 
 const DetailPage = (props) => {
-
   const [ cmd, setCmd ] = useState(false);
   const { user } = useContext(UserContext);
+  const [ btnStatus, setBtnStatus ] = useState({"like": "", "hate": ""})
   const textareaValue = useRef();
 
   return (
@@ -43,14 +45,8 @@ const DetailPage = (props) => {
 
                 {/* いいねボタン like, hate buton */}
                 <div className="d-flex justify-content-center">
-                  <button type="button" className="btn btn-outline-primary m-1 px-4">
-                    <i className="bi bi-hand-thumbs-up"></i>
-                    { props.data.like_cnt }
-                  </button>
-                  <button type="button" className="btn btn-outline-danger m-1 px-4">
-                    <i className="bi bi-hand-thumbs-down"></i>
-                    { props.data.hate_cnt }
-                  </button>
+                    <LikeButton data={ props } btnStatus={ btnStatus } setBtnStatus={ setBtnStatus } />
+                    <HateButton data={ props } btnStatus={ btnStatus } setBtnStatus={ setBtnStatus } />
                 </div>
               </article>
 
