@@ -1,16 +1,21 @@
 import React, { useRef, useState, useContext, useEffect } from 'react';
 import './DetailPageCss.css';
 import CommentAllow from './CommentAllow';
-import CommentNotAllow from './CommentNotAllow';
+import LoginModal from '../common/LoginModal';
 import { UserContext } from '../../lib/Auth';
 import LikeButton from '../common/LikeButton';
 import HateButton from '../common/HateButton';
+import CommentNotAllow from './CommentNotAllow';
 
 const DetailPage = (props) => {
   const [ cmd, setCmd ] = useState(false);
+  const [ showModal, setShowModal ] = useState(false);
   const { user } = useContext(UserContext);
-  const [ btnStatus, setBtnStatus ] = useState({"like": "", "hate": ""})
   const textareaValue = useRef();
+
+  useEffect(() => {
+    props.getLikeCount();
+  }, []);
 
   return (
     <>
@@ -45,8 +50,8 @@ const DetailPage = (props) => {
 
                 {/* いいねボタン like, hate buton */}
                 <div className="d-flex justify-content-center">
-                    <LikeButton data={ props } btnStatus={ btnStatus } setBtnStatus={ setBtnStatus } />
-                    <HateButton data={ props } btnStatus={ btnStatus } setBtnStatus={ setBtnStatus } />
+                    <LikeButton data={ props } user={ user } showModal={ showModal } setShowModal={ setShowModal } />
+                    <HateButton data={ props } user={ user } showModal={ showModal } setShowModal={ setShowModal } />
                 </div>
               </article>
 
@@ -85,9 +90,9 @@ const DetailPage = (props) => {
                     </div>
                   ))
                 }
-                { props.token
+                { props.token && user
                 ? <CommentAllow commentOnSubmit={ props.commentOnSubmit } /> 
-                : <CommentNotAllow />
+                : <CommentNotAllow showModal={ showModal } setShowModal={ setShowModal } />
                 }
               </div>
             </div>
@@ -155,6 +160,12 @@ const DetailPage = (props) => {
           </div>
         </div>
       </div>
+
+      <LoginModal
+        showModal={ showModal }
+        setShowModal={ setShowModal }
+        msg="Login"
+      />
     </>
   );
 }

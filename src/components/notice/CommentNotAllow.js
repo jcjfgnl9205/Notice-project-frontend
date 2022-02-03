@@ -1,11 +1,13 @@
-import React from 'react';
+  import React from 'react';
 
 
-const CommentNotAllow = () => {
+
+const CommentNotAllow = props => {
+
 
   return (
   <>
-    <div>
+    <div onClick={ () => props.setShowModal(true) }>
       <h6 className="font-weight-bold text-center">
         コメントを作成
       </h6>

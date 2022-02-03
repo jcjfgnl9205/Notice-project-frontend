@@ -7,7 +7,8 @@ import { UserContext } from '../../lib/Auth';
 const Notice = () => {
   const path = useLocation().pathname;
   const [ data, setData ] = useState(null);
-  const { token } = useContext(UserContext);
+  const { user, token } = useContext(UserContext);
+  const [ btnStatus, setBtnStatus ] = useState({"like": "", "hate": ""})
   const navigate = useNavigate();
 
   // Get Notice
@@ -174,6 +175,23 @@ const Notice = () => {
     }
   }
 
+  // get like, hate count
+  const getLikeCount = async () => {
+    if (user) {
+      const id = path.split("/");
+      const param = { method: "POST",
+                      headers: { "Content-Type": "application/json;"
+                                , "Authorization": "Bearer " + token},
+                      body: JSON.stringify({ "notice_id": id[id.length - 1] })
+                      };
+      const response = await fetch("http://localhost:8000"+path+"/getLike", param);
+      const data = await response.json();
+      if (response.status === 200) {
+        setBtnStatus({ "like": data.like ? "active" : "", "hate": data.hate ? "active" : ""})
+      }
+    }
+  }
+
   const renderNotice = data === null 
                       ? <Spinner />
                       : <DetailPage data={ data } 
@@ -184,6 +202,9 @@ const Notice = () => {
                                     commentOnSubmit={ commentOnSubmit }
                                     commentUpdateOnSubmit = { commentUpdateOnSubmit }
                                     commentDelete={ commentDelete }
+                                    btnStatus={ btnStatus }
+                                    setBtnStatus={ setBtnStatus }
+                                    getLikeCount={ getLikeCount }
                                     />;
 
   return (
