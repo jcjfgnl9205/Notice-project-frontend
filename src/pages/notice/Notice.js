@@ -3,13 +3,22 @@ import { useLocation, useNavigate } from "react-router-dom";
 import DetailPage from '../../components/notice/DetailPage';
 import Spinner from '../../components/common/Spinner';
 import { UserContext } from '../../lib/Auth';
+import Pagination from '../../components/common/Pagination';
 
 const Notice = () => {
   const path = useLocation().pathname;
   const [ data, setData ] = useState(null);
+  const [ commentData, setCommentData ] = useState(null);
   const { user, token } = useContext(UserContext);
   const [ btnStatus, setBtnStatus ] = useState({"like": "", "hate": ""})
   const navigate = useNavigate();
+
+  const [ total, setTotal ] = useState(0);//comment数
+  const [ currentPage, setCurrentPage ] = useState(1);//現在ページ
+  const [ paginationPage, setPaginationPage ] = useState(5);//一つのページに表示するcomment数
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  }
 
   // Get Notice
   useEffect(() => {
@@ -32,6 +41,20 @@ const Notice = () => {
     };
     notice();
   }, []);
+
+  // Get Comment
+  useEffect( async () => {
+    const param = { method: "GET",
+                    headers: { "Content-Type": "application/json", },
+                  };
+
+    const response = await fetch(`http://127.0.0.1:8000${path}/comment/?page=${currentPage}&size=${paginationPage}`, param);
+    const data = await response.json();
+    if (response.status === 200) {
+      setCommentData(data.items);
+      setTotal(data.total);
+    }
+  }, [currentPage]);
 
   // Create Comment
   const commentOnSubmit = comment => {
@@ -192,9 +215,18 @@ const Notice = () => {
     }
   }
 
+  const renderPagination = data && data.comment.length
+                            ? <Pagination total={ total }
+                                          paginate={ paginate }
+                                          paginationPage={ paginationPage }
+                                          currentPage={ currentPage } /> 
+                            : 'null';
+
   const renderNotice = data === null 
                       ? <Spinner />
                       : <DetailPage data={ data } 
+                                    commentData = { commentData }
+                                    setCommentPaginate = { paginate }
                                     token={ token }
                                     noticeDelete={ noticeDelete }
                                     likeButtonEvent = { likeButtonEvent }
@@ -205,6 +237,7 @@ const Notice = () => {
                                     btnStatus={ btnStatus }
                                     setBtnStatus={ setBtnStatus }
                                     getLikeCount={ getLikeCount }
+                                    renderPagination = { renderPagination }
                                     />;
 
   return (

@@ -10,7 +10,7 @@ const Notices = () => {
   const [ notices, setNotices ] = useState([]);
   const columns = ["No", "Title", "Views", "Created"]
   const { user } = useContext(UserContext);
-  const [ noticeTotal, setNoticeTotal ] = useState(0);//noticeの数
+  const [ total, setTotal ] = useState(0);//noticeの数
   const [ currentPage, setCurrentPage ] = useState(1);//現在ページ
   const [ paginationPage, setPaginationPage ] = useState(5);//一つのページに表示するnotice数
 
@@ -19,12 +19,12 @@ const Notices = () => {
   }
 
   useEffect(() => {
-    const url = `http://localhost:8000/notices?page=${currentPage}&size=${paginationPage}`;
+    const url = `http://localhost:8000/notices/?page=${currentPage}&size=${paginationPage}`;
     fetch(url)
       .then( response => { return response.json() })
       .then( response => {
         setNotices(response.items);
-        setNoticeTotal(response.total);
+        setTotal(response.total);
         
     });
   }, [currentPage]);
@@ -34,7 +34,7 @@ const Notices = () => {
                         : 'null';
 
   const renderPagination = notices.length
-                        ? <Pagination noticeTotal={ noticeTotal }
+                        ? <Pagination total={ total }
                                       paginate={ paginate }
                                       paginationPage={ paginationPage }
                                       currentPage={ currentPage } /> 

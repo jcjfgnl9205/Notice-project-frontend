@@ -2,17 +2,17 @@ import React from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 
-const Pagination = ({ noticeTotal, paginate, paginationPage, currentPage }) => {
-  
+const Pagination = ({ total, paginate, paginationPage, currentPage }) => {
+
   let [searchParams, setSearchParams] = useSearchParams();
 
   const page = [];
-  for (let i = 1; i <= Math.ceil(noticeTotal / paginationPage); i++){
+  for (let i = 1; i <= Math.ceil(total / paginationPage); i++){
     page.push(i);
   }
 
   const pageGroup = [];
-  for (let i = 1; i <= Math.ceil(noticeTotal / paginationPage / 10); i++) {
+  for (let i = 1; i <= Math.ceil(total / paginationPage / 10); i++) {
     const p = (i - 1) * 10;
     pageGroup.push(page.slice(p, p + 10))
   }

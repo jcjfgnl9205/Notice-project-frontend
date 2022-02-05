@@ -291,3 +291,28 @@ h5 {
 .update-cancel-btn:hover {
   cursor: pointer;
 }
+
+.like_btn {
+  background-color: #fff;
+  border: 2px solid #2199e8;
+  color: #2199e8;
+  padding: 15px 35px;
+  border-radius: 4px;
+  margin: 1px;
+}
+.like_btn:hover{
+  background-color: #2199e8;
+  color: #fff;
+}
+.hate_btn {
+  background-color: #fff;
+  border: 2px solid #ff0000;
+  color: #ff0000;
+  padding: 15px 35px;
+  border-radius: 4px;
+  margin: 1px;
+}
+.hate_btn:hover {
+  background-color: #ff0000;
+  color: #fff;
+}

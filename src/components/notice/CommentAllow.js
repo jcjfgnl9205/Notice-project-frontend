@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Alert from '../common/Alert';
 
 const CommentAllow = (props) => {
 
   const [ comment, setComment ] = useState('');
   const [ msg, setMsg ] = useState('');
+  const path = useLocation().pathname;
+  const navigate = useNavigate();
 
   useEffect(() => {
     if(props.comment) {
@@ -25,12 +28,14 @@ const CommentAllow = (props) => {
     return true;
   }
 
-  const onSubmit = e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-        props.commentOnSubmit(comment);
+        await props.commentOnSubmit(comment);
         setComment('');
     }
+    props.setCommentPaginate(1);
+    navigate(`${path}?page=1`);
   }
   
   const errorMsg = msg ? <Alert msg={msg} className="alert alert-warning"/> : null;

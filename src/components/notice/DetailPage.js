@@ -28,7 +28,7 @@ const DetailPage = (props) => {
                 <div className="article-title">
                   <div className="d-flex justify-content-between">
                     <h2>{ props.data.title }</h2>
-                    { user && props.data.user.username == user.sub
+                    { user && props.data.user.username === user.sub
                     ? <span>
                         <i className="bi bi-pencil m-1 update-btn"></i>
                         <i className="bi bi-trash m-1 delete-btn" onClick={ () => props.noticeDelete(props.data.id) }></i>
@@ -58,15 +58,15 @@ const DetailPage = (props) => {
               {/* コメント COMMENT */}
               <div className="comment">
                 {
-                  props.data.comment?.map(comment => (
-                    <div className="comment-item" key={comment.id} >
+                  props.commentData?.map(comment => (
+                    <div className="comment-item" key={comment.created_at} >
                       <div className="comment-title d-flex justify-content-between">
                         <label>{ comment.username }</label>
                         <div>
-                            { user && comment.username == user.sub
+                            { user && comment.username === user.sub
                               ? <span>
                                   {
-                                    cmd && cmd == comment.id
+                                    cmd && cmd === comment.id
                                     ? <span>
                                         <i className="bi bi-pencil-fill m-1 update-btn" onClick={ () => props.commentUpdateOnSubmit(textareaValue.current.value, comment.id, setCmd) }></i>
                                         <i className="bi bi-x-lg m-1 update-cancel-btn" onClick={ () => setCmd(false) }></i>
@@ -83,15 +83,16 @@ const DetailPage = (props) => {
                         </div>
                       </div>
                       {
-                        cmd && cmd == comment.id
-                        ? <CommentAllow cmd="update" comment={ comment } cmd={ cmd } setCmd={ setCmd } textareaRef={textareaValue} />
+                        cmd && cmd === comment.id
+                        ? <CommentAllow cmd="update" comment={ comment } cmd={ cmd } setCmd={ setCmd } textareaRef={textareaValue} setCommentPaginate={ props.setCommentPaginate } />
                         : <div className="comment-comment" >{ comment.comment}</div>
                       }
                     </div>
                   ))
                 }
+                { props.renderPagination }  
                 { props.token && user
-                ? <CommentAllow commentOnSubmit={ props.commentOnSubmit } /> 
+                ? <CommentAllow commentOnSubmit={ props.commentOnSubmit } setCommentPaginate={ props.setCommentPaginate } /> 
                 : <CommentNotAllow showModal={ showModal } setShowModal={ setShowModal } />
                 }
               </div>
