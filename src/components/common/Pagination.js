@@ -4,7 +4,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 
 const Pagination = ({ total, paginate, paginationPage, currentPage }) => {
 
-  let [searchParams, setSearchParams] = useSearchParams();
+  let [searchParams ] = useSearchParams();
 
   const page = [];
   for (let i = 1; i <= Math.ceil(total / paginationPage); i++){
@@ -34,11 +34,11 @@ const Pagination = ({ total, paginate, paginationPage, currentPage }) => {
 
 
           { pageGroup[pageGroupNo]?.map(number => (
-            <li className={ searchParams.get("page")==number ? "page-item active" : "page-item" } key={ number }>
+            <li className={ parseInt(searchParams.get("page")) === number ? "page-item active" : "page-item" } key={ number }>
               <Link className="page-link" to={ `?page=${number}`} onClick={() => paginate(number)}>{ number }</Link>
             </li>
           ))
-          
+
           }
           {
             pageGroup[pageGroupNo+1]

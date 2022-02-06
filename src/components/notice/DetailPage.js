@@ -1,22 +1,33 @@
-import React, { useRef, useState, useContext, useEffect } from 'react';
+import React, { useRef, useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import './DetailPageCss.css';
-import CommentAllow from './CommentAllow';
 import LoginModal from '../common/LoginModal';
 import { UserContext } from '../../lib/Auth';
 import LikeButton from '../common/LikeButton';
 import HateButton from '../common/HateButton';
 import CommentNotAllow from './CommentNotAllow';
+import Comments from './Comments';
+import Pagination from '../common/Pagination';
 
 const DetailPage = (props) => {
-  const [ cmd, setCmd ] = useState(false);
   const [ showModal, setShowModal ] = useState(false);
   const { user } = useContext(UserContext);
   const textareaValue = useRef();
-
-  useEffect(() => {
-    props.getLikeCount();
-  }, []);
-
+  const renderComment = props.commentData && props.commentData.length
+                        ? props.commentData.map((comment, key) => {
+                          return <Comments user={ user } comment={ comment } update={ props.commentUpdate } delete={ props.commentDelete } msg={ props.msg } setMsg={ props.setMsg } key={ key } />
+                        })
+                        : <p className="text-center">Invalid Comments</p>
+  
+  const renderPagination = props.commentData && props.commentData.length
+                        ? <Pagination total={ props.commentTotal }
+                                      paginate={ props.paginate }
+                                      paginationPage={ props.paginationPage }
+                                      currentPage={ props.currentPage } /> 
+                        : <span></span>;
+  // useEffect(() => {
+  //   props.getLikeCount();
+  // }, []);
   return (
     <>
       <div className="detail-single">
@@ -45,7 +56,11 @@ const DetailPage = (props) => {
                 </div>
                 {/* 本文 CONTENT */}
                 <div className="article-content">
-                  { props.data.content }
+                  {
+                    props.data.content.split("\n").map((data, key) => {
+                      return <span key={key}>{data}<br/></span>
+                    })
+                  }
                 </div>
 
                 {/* いいねボタン like, hate buton */}
@@ -57,43 +72,12 @@ const DetailPage = (props) => {
 
               {/* コメント COMMENT */}
               <div className="comment">
-                {
-                  props.commentData?.map(comment => (
-                    <div className="comment-item" key={comment.created_at} >
-                      <div className="comment-title d-flex justify-content-between">
-                        <label>{ comment.username }</label>
-                        <div>
-                            { user && comment.username === user.sub
-                              ? <span>
-                                  {
-                                    cmd && cmd === comment.id
-                                    ? <span>
-                                        <i className="bi bi-pencil-fill m-1 update-btn" onClick={ () => props.commentUpdateOnSubmit(textareaValue.current.value, comment.id, setCmd) }></i>
-                                        <i className="bi bi-x-lg m-1 update-cancel-btn" onClick={ () => setCmd(false) }></i>
-                                      </span>
-                                    : <span>
-                                        <i className="bi bi-pencil m-1 update-btn" onClick={ () => setCmd(comment.id) }></i>
-                                        <i className="bi bi-trash m-1 delete-btn" onClick={ () => props.commentDelete(comment.id) }></i>
-                                      </span>
-                                  }
-                                </span>
-                              : null
-                            }
-                          <span className="comment-date">{ new Date(comment.created_at).toISOString().split("T")[0] }</span>
-                        </div>
-                      </div>
-                      {
-                        cmd && cmd === comment.id
-                        ? <CommentAllow cmd="update" comment={ comment } cmd={ cmd } setCmd={ setCmd } textareaRef={textareaValue} setCommentPaginate={ props.setCommentPaginate } />
-                        : <div className="comment-comment" >{ comment.comment}</div>
-                      }
-                    </div>
-                  ))
-                }
-                { props.renderPagination }  
+                { renderComment }
+                { renderPagination }
+                
                 { props.token && user
-                ? <CommentAllow commentOnSubmit={ props.commentOnSubmit } setCommentPaginate={ props.setCommentPaginate } /> 
-                : <CommentNotAllow showModal={ showModal } setShowModal={ setShowModal } />
+                  ? <Comments comment="" create={ props.commentCreate } textareaRef={ textareaValue } cmd="create"/> 
+                  : <CommentNotAllow showModal={ showModal } setShowModal={ setShowModal } />
                 }
               </div>
             </div>
@@ -121,22 +105,22 @@ const DetailPage = (props) => {
                   <div className="latest-post-aside media">
                     <div className="lpa-left media-body">
                       <div className="lpa-title">
-                        <h5><a href="#">Prevent 75% of visitors from google analytics</a></h5>
+                        <h5><Link to="#">Prevent 75% of visitors from google analytics</Link></h5>
                       </div>
                       <div className="lpa-meta">
-                        <a className="name" href="#">Rachel Roth</a>
-                        <a className="date" href="#">26 FEB 2020</a>
+                        <Link className="name" to="#">Rachel Roth</Link>
+                        <Link className="date" to="#">26 FEB 2020</Link>
                       </div>
                     </div>
                   </div>
                   <div className="latest-post-aside media">
                     <div className="lpa-left media-body">
                       <div className="lpa-title">
-                        <h5><a href="#">Prevent 75% of visitors from google analytics</a></h5>
+                        <h5><Link to="#">Prevent 75% of visitors from google analytics</Link></h5>
                       </div>
                       <div className="lpa-meta">
-                        <a className="name" href="#">Rachel Roth</a>
-                        <a className="date" href="#">26 FEB 2020</a>
+                        <Link className="name" to="#">Rachel Roth</Link>
+                        <Link className="date" to="#">26 FEB 2020</Link>
                       </div>
                     </div>
                   </div>
@@ -149,11 +133,11 @@ const DetailPage = (props) => {
                 </div>
                 <div className="widget-body">
                   <div className="nav tag-cloud">
-                    <a href="#">SAMPLE1</a>
-                    <a href="#">SAMPLE2</a>
-                    <a href="#">SAMPLE3</a>
-                    <a href="#">SAMPLE4</a>
-                    <a href="#">SAMPLE5</a>
+                    <Link to="#">SAMPLE1</Link>
+                    <Link to="#">SAMPLE2</Link>
+                    <Link to="#">SAMPLE3</Link>
+                    <Link to="#">SAMPLE4</Link>
+                    <Link to="#">SAMPLE5</Link>
                   </div>
                 </div>
               </div>
