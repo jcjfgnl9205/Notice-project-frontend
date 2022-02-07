@@ -47,7 +47,7 @@ const Notice = () => {
     }
     getNotice();
     getLikeCount();
-  }, [path, navigate]);
+  }, []);
 
   // Delete Notice
   const noticeDelete = async (notice_id) => {
@@ -179,7 +179,7 @@ const Notice = () => {
                       };
       const response = await fetch("http://localhost:8000"+path+"/getLike", param);
       const data = await response.json();
-      if (response.status === 200) {
+      if (response.status === 200 && data !== null) {
         setBtnStatus({ "like": data.like ? "active" : "", "hate": data.hate ? "active" : ""})
       }
     }
@@ -199,9 +199,7 @@ const Notice = () => {
                                     />;
 
   const renderComment = commentData && commentData.length
-                      ? commentData.map((comment, key) => {
-                          return <Comments user={ user } comment={ comment } update={ commentUpdate } delete={ commentDelete } key={ key } />
-                        })
+                      ? <Comments user={ user } comments={ commentData } update={ commentUpdate } delete={ commentDelete }/>
                       : <p className="text-center">Invalid Comments</p>
 
   const renderCommentCreate = token && user

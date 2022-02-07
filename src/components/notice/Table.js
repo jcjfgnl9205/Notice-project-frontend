@@ -22,7 +22,7 @@ const Table = ({ columns, data }) => {
                     { data.map( data => (
                       <tr key={ data.id }>
                         <td style={{ width: "5%" }}>{ data.id }</td>
-                        <td style={{ width: "65%" }}><Link to={{ pathname: String(data.id) }}>{ data.title }</Link></td>
+                        <td style={{ width: "65%" }}><Link to={{ pathname: String(data.id), search: "?page=1" }}>{ data.title }</Link></td>
                         <td style={{ width: "10%" }}>{ data.views }</td>
                         <td style={{ width: "20%" }}>{ new Date(data.created_at).toISOString().split("T")[0] }</td>
                       </tr>

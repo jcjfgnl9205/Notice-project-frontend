@@ -25,39 +25,42 @@ const Comments = (props) => {
 
   return (
       <>
-        {
-          <div className="comment-item">
-            <div className="comment-title d-flex justify-content-between">
-              <label>{ props.comment.username }</label>
-              <div>
-                { props.user && props.user.id === props.comment.owner_id
-                  ?
+        { props.comments.map((data, key) => {
+          return (
+                <div className="comment-item" key={key}>
+                  <div className="comment-title d-flex justify-content-between">
+                    <label>{ data.username }</label>
+                    <div>
+                      { props.user && props.user.id === data.owner_id
+                        ?
+                          updateFlg
+                          ? <span>
+                              <i className="bi bi-pencil-fill m-1 update-btn" onClick={ () => update(textareaValue.current, data.id) }></i>
+                              <i className="bi bi-x-lg m-1 update-cancel-btn" onClick={ () => { setUpdateFlg(false); setMsg(''); } }></i>
+                            </span>
+                          : <span>
+                              <i className="bi bi-pencil m-1 update-btn" onClick={ () => setUpdateFlg(true) }></i>
+                              <i className="bi bi-trash m-1 delete-btn" onClick={ () => props.delete(data.id) }></i>
+                            </span>
+                        : <span></span>
+                      }
+                      <span className="comment-date">{ new Date(data.created_at).toISOString().split("T")[0] }</span>
+                    </div>
+                  </div>
+                  {
                     updateFlg
-                    ? <span>
-                        <i className="bi bi-pencil-fill m-1 update-btn" onClick={ () => update(textareaValue.current, props.comment.id) }></i>
-                        <i className="bi bi-x-lg m-1 update-cancel-btn" onClick={ () => { setUpdateFlg(false); setMsg(''); } }></i>
-                      </span>
-                    : <span>
-                        <i className="bi bi-pencil m-1 update-btn" onClick={ () => setUpdateFlg(true) }></i>
-                        <i className="bi bi-trash m-1 delete-btn" onClick={ () => props.delete(props.comment.id) }></i>
-                      </span>
-                  : <span></span>
-                }
-                <span className="comment-date">{ new Date(props.comment.created_at).toISOString().split("T")[0] }</span>
-              </div>
-            </div>
-            {
-              updateFlg
-              ? <CommentAllow comment={ props.comment.comment } textareaRef={ textareaValue } msg={ msg } setMsg={ setMsg } />
-              : <div className="comment-comment" >
-                { 
-                  props.comment.comment.split("\n").map((data, key) => {
-                    return <span key={key}>{data}<br/></span>
-                  })
-                }
+                    ? <CommentAllow comment={ data.comment } textareaRef={ textareaValue } msg={ msg } setMsg={ setMsg } />
+                    : <div className="comment-comment" >
+                      { 
+                        data.comment.split("\n").map((data, key) => {
+                          return <span key={key}>{data}<br/></span>
+                        })
+                      }
+                      </div>
+                  }
                 </div>
-            }
-          </div>
+          )
+        })
         }
       </>
   );

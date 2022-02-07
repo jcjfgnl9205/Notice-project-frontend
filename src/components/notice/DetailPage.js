@@ -41,8 +41,8 @@ const DetailPage = (props) => {
 
         {/* いいねボタン like, hate buton */}
         <div className="d-flex justify-content-center">
-            <LikeButton data={ props } user={ user } />
-            <HateButton data={ props } user={ user } />
+            <LikeButton data={ props } />
+            <HateButton data={ props } />
         </div>
       </article>
     </>
