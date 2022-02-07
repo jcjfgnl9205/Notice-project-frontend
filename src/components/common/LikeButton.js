@@ -2,8 +2,8 @@ import React from 'react';
 
 const LikeButton = ( props ) => {
 
-  const btnClick = () => {
-    !props.user ? props.setShowModal(true) : props.data.likeButtonEvent();
+  const btnClick = async () => {
+    !props.user ? props.data.setShowModal(true) : await props.data.likeButtonEvent();
     props.data.getLikeCount();
   }
 

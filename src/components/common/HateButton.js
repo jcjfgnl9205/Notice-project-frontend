@@ -2,8 +2,8 @@ import React from 'react';
 
 const HateButton = ( props ) => {
 
-  const btnClick = () => {
-    !props.user ? props.setShowModal(true) : props.data.hateButtonEvent();
+  const btnClick = async () => {
+    !props.user ? props.data.setShowModal(true) : await props.data.hateButtonEvent();
     props.data.getLikeCount();
   }
 

@@ -1,13 +1,23 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
+import { UserContext } from '../../lib/Auth';
 import DetailPage from '../../components/notice/DetailPage';
 import Spinner from '../../components/common/Spinner';
-import { UserContext } from '../../lib/Auth';
+import Comments from '../../components/notice/Comments';
+import CommentCreate from '../../components/notice/CommentCreate';
+import CommentNotAllow from '../../components/notice/CommentNotAllow';
+import Pagination from '../../components/common/Pagination';
+import Template1 from '../../components/notice/Template1';
+import Template2 from '../../components/notice/Template2';
+import Template3 from '../../components/notice/Template3';
+import LoginModal from '../../components/common/LoginModal';
 
 const Notice = () => {
   const path = useLocation().pathname;
   const [ data, setData ] = useState(null);
   const [ commentData, setCommentData ] = useState(null);
+  const [ showModal, setShowModal ] = useState(false);
+
   const { user, token } = useContext(UserContext);
   const [ btnStatus, setBtnStatus ] = useState({"like": "", "hate": ""})
   const navigate = useNavigate();
@@ -36,6 +46,7 @@ const Notice = () => {
       }
     }
     getNotice();
+    getLikeCount();
   }, [path, navigate]);
 
   // Delete Notice
@@ -54,7 +65,6 @@ const Notice = () => {
 
   // Get Comment
   useEffect(() => {
-    console.log("get comment")
     const getComment = async () => {
       const param = { method: "GET",
                       headers: { "Content-Type": "application/json", },
@@ -67,6 +77,7 @@ const Notice = () => {
       }
     }
     getComment();
+    getLikeCount();
     setFlg(false)
   }, [path, navigate, commentTotal, currentPage, paginationPage, flg]);
 
@@ -178,27 +189,62 @@ const Notice = () => {
   const renderNotice = data === null 
                       ? <Spinner />
                       : <DetailPage data={ data } 
-                                    commentData = { commentData }
                                     token={ token }
                                     noticeDelete={ noticeDelete }
                                     likeButtonEvent = { likeButtonEvent }
                                     hateButtonEvent = { hateButtonEvent }
-                                    commentCreate = { commentCreate }
-                                    commentUpdate = { commentUpdate }
-                                    commentDelete={ commentDelete }
                                     btnStatus={ btnStatus }
-                                    setBtnStatus={ setBtnStatus }
                                     getLikeCount={ getLikeCount }
-
-                                    commentTotal={ commentTotal }
-                                    paginate={ paginate }
-                                    paginationPage={ paginationPage }
-                                    currentPage={ currentPage }
+                                    setShowModal={ setShowModal }
                                     />;
+
+  const renderComment = commentData && commentData.length
+                      ? commentData.map((comment, key) => {
+                          return <Comments user={ user } comment={ comment } update={ commentUpdate } delete={ commentDelete } key={ key } />
+                        })
+                      : <p className="text-center">Invalid Comments</p>
+
+  const renderCommentCreate = token && user
+                            ? <CommentCreate comment="" create={ commentCreate } /> 
+                            : <CommentNotAllow showModal={ showModal } setShowModal={ setShowModal } />
+  
+  const renderCommentPaginate = commentData && commentData.length
+                              ? <Pagination total={ commentTotal }
+                                            paginate={ paginate }
+                                            paginationPage={ paginationPage }
+                                            currentPage={ currentPage } /> 
+                              : <span></span>
+
+  const renderTemplate1 = <Template1 />
+  const renderTemplate2 = <Template2 />
+  const renderTemplate3 = <Template3 />
 
   return (
     <>
-      { renderNotice }
+      <div className="detail-single">
+        <div className="container">
+          <div className="row align-items-start">
+          <div className="col-lg-8 m-15 px-tb">
+            { renderNotice }
+            <div className="comment">
+              { renderComment }
+              { renderCommentPaginate }
+              { renderCommentCreate }
+            </div>
+          </div>
+            <div className="col-lg-4 m-15px-tb detail-aside">
+              { renderTemplate1 }
+              { renderTemplate2 }
+              { renderTemplate3 }
+            </div>
+          </div>
+        </div>
+      </div>
+      <LoginModal
+        showModal={ showModal }
+        setShowModal={ setShowModal }
+        msg="Login"
+      />
     </>
   );
 }
