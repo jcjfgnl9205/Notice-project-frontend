@@ -8,12 +8,13 @@ import Spinner from '../../components/common/Spinner'
 
 const noticeCreate = {
   title: "",
-  content: ""
+  content: "",
+  files: "",
 }
 
 const NoticeCreate = () => {
     const [ notice, setNotice ] = useState(noticeCreate);
-    const { title, content } = notice;
+    const { title, content, files } = notice;
     const [ msg, setMsg ] = useState('');
     const { token, user } = useContext(UserContext);
     const navigate = useNavigate();
@@ -25,10 +26,11 @@ const NoticeCreate = () => {
     });
 
     const onChange = e => {
+      const files = e.target.files;
       const { value, name } = e.target;
       setNotice({
         ...notice, //Inputをコビーする
-        [name]: value
+        [name]: name == "files" ? files : value
       });
     };
 
@@ -47,16 +49,20 @@ const NoticeCreate = () => {
     const onSubmit = e => {
       e.preventDefault();
       if (validateForm()) {
-        const data = { title: title
-                      , content: content};
-
+        let formData = new FormData();
+        formData.append("title", title);
+        formData.append("content", content);
+        formData.append("files", new File([""], ""))
+        for (let i = 0; i < files.length; i++) {
+          console.log("test")
+          formData.append("files", files[i])
+        }
         const param = { method: "POST",
-                        headers: { "Content-Type": "application/json;"
-                                  , "Authorization": "Bearer " + token},
-                        body: JSON.stringify(data)
+                        headers: {"Authorization": "Bearer " + token},
+                        body: formData
         };
 
-        const url = "http://localhost:8000/notices";
+        const url = "http://localhost:8000/notices/";
         const fetchNotice = async () => {
           const response = await fetch(url, param);
           const data = await response.json();
