@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from '../../lib/Auth';
+import { saveAs } from "file-saver";
 import DetailPage from '../../components/notice/DetailPage';
 import Spinner from '../../components/common/Spinner';
 import Comments from '../../components/notice/Comments';
@@ -185,17 +186,27 @@ const Notice = () => {
     }
   }
 
+  // file download
+  const fileDownload = async (file_id, file_name) => {
+    const param = { method: "GET", headers: { "Content-Type": "application/json;", Accept: 'application/octet-stream'} };
+    const response = await fetch(`http://localhost:8000/notices/file/download/${file_id}`, param);
+    if (response.status === 200) {
+      saveAs(response.url, file_name)
+    }
+  }
+
 
   const renderNotice = data === null 
                       ? <Spinner />
                       : <DetailPage data={ data } 
                                     token={ token }
                                     noticeDelete={ noticeDelete }
-                                    likeButtonEvent = { likeButtonEvent }
-                                    hateButtonEvent = { hateButtonEvent }
+                                    likeButtonEvent={ likeButtonEvent }
+                                    hateButtonEvent={ hateButtonEvent }
                                     btnStatus={ btnStatus }
                                     getLikeCount={ getLikeCount }
                                     setShowModal={ setShowModal }
+                                    fileDownload={ fileDownload }
                                     />;
 
   const renderComment = commentData && commentData.length

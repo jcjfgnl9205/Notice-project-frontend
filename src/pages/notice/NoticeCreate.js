@@ -30,7 +30,7 @@ const NoticeCreate = () => {
       const { value, name } = e.target;
       setNotice({
         ...notice, //Inputをコビーする
-        [name]: name == "files" ? files : value
+        [name]: name === "files" ? files : value
       });
     };
 

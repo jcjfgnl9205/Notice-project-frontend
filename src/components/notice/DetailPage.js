@@ -44,6 +44,18 @@ const DetailPage = (props) => {
             <LikeButton data={ props } />
             <HateButton data={ props } />
         </div>
+        
+        <div>
+          {
+            props.data.file?.map( data => {
+              return <div key={ data.id }>
+                      <span className="link_btn" onClick={ () => props.fileDownload(data.id, data.file_name) }>
+                        { data.file_name }
+                      </span>
+                    </div>
+            })
+          }
+        </div>
       </article>
     </>
   );

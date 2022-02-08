@@ -316,3 +316,14 @@ h5 {
   background-color: #ff0000;
   color: #fff;
 }
+
+.link_btn {
+  font-size: 14px;
+}
+
+.link_btn:hover {
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  color: #fc5356;
+}
