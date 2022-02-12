@@ -16,11 +16,14 @@ export const UserProvider = props => {
         "Authorization": "Bearer " + token,
       },
     };
-    const response = await fetch("http://127.0.0.1:8000/auth/protected", param);
+    const response = await fetch("http://127.0.0.1:8000/auth/refresh", param);
     const data = await response.json();
 
     if (response.status === 200) {
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", data.access_token);
+    } else {
+      setUser(null)
+      setToken(null)
     }
 
     if(loading){

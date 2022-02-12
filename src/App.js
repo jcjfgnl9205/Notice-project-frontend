@@ -24,18 +24,18 @@ const App = () => {
       <div>
         <Navbar />
         <div className="container">
-          <Routes>
-            <Route path="/" element={ <Home /> } />
-            <Route path="/login" element={token ? <Navigate to="/" /> : <Login />}/>
-            <Route path="/register" element={token ? <Navigate to="/" /> : <Register />}/>
+              <Routes>
+                <Route path="/" element={ <Home /> } />
+                <Route path="/login" element={token ? <Navigate to="/" /> : <Login />}/>
+                <Route path="/register" element={token ? <Navigate to="/" /> : <Register />}/>
 
-            <Route path="/notices" element={ <Notices /> } />
-            <Route path="/notices/:id" element={ <Notice /> } />
-            <Route path="/notices/create" element={ <NoticeCreate /> } />
+                <Route path="/notices" element={ <Notices /> } />
+                <Route path="/notices/:id" element={ <Notice /> } />
+                <Route path="/notices/create" element={ <NoticeCreate /> } />
 
-            <Route path="*" element={ <Navigate to="/notFound" /> } />
-            <Route path="/notFound" element={ <NotFound /> } />
-          </Routes>
+                <Route path="*" element={ <Navigate to="/notFound" /> } />
+                <Route path="/notFound" element={ <NotFound /> } />
+              </Routes>
         </div>
       </div>
     </Router>
